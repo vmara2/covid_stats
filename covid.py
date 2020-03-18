@@ -14,6 +14,7 @@ r2.raise_for_status()
 soup = BeautifulSoup(r.text, 'html.parser')
 soup2 = BeautifulSoup(r2.text, 'html.parser')
 
+# [world cases, world deaths, US cases, US deaths, Illinois cases, Illinois deaths]
 covid_stats = []
 
 # gets stats for world
@@ -38,16 +39,16 @@ for header in soup2.find_all('h1'):
 state_table = soup2.table
 table_rows = state_table.find_all('tr')
 
+# parsing table data for Illinois row
 for tr in table_rows:
     td = tr.find_all('td')
     row = [i.text for i in td]
     if not row: # incase an array is empty so we don't access it in the next elif
         continue
-    elif " Illinois " in row[0]:
+    elif " Illinois " in row[0]: # once we reach Illinois row, append the data
         covid_stats.append(str(row[1].replace(" ","")))
         covid_stats.append(str(row[3].replace(" ","")))
 
 for elem in covid_stats:
     print(elem)
 
-:q
