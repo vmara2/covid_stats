@@ -59,7 +59,7 @@ def getStats():
 
 def main():
     CONSUMER_KEY = 'YOUR CONSUMER KEY HERE'
-    CONSUMER_SECRET = 'YOUR CONSUMER SECRET HERE'
+    CONSUMER_SECRET = 'YOUR COSUMER SECRET KEY HERE'
     ACCESS_KEY = 'YOUR ACCESS TOKEN HERE'
     ACCESS_SECRET = 'YOUR ACCESS SECRET TOKEN HERE'
 
@@ -73,7 +73,7 @@ def main():
     covid_world = ("\n\nWorld cases: " + stats[0] + "\nWorld deaths: " + stats[1])
     covid_us = ("\nUS cases: " + stats[2] + "\nUS deaths: " + stats[3])
     covid_illinois = ("\nIllinois cases: " + stats[4] + "\nIllinois deaths: " + stats[5])
-    tweet = ("COVID-19 STATS\n" + now.strftime("%m-%d-%y") + covid_world + covid_us + covid_illinois)
+    tweet = ("COVID-19 STATS\n" + now.strftime("%m-%d-%y %I:%M %p") + covid_world + covid_us + covid_illinois)
     
     api.update_status(tweet)
 
