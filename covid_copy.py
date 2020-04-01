@@ -21,7 +21,7 @@ soup2 = BeautifulSoup(r2.text, 'html.parser')
 soup3 = BeautifulSoup(r3.text, 'html.parser')
 
 def getStats():
-    # [world cases, world deaths, US cases, US deaths, Illinois cases, Illinois deaths, Lake County cases]
+    # [World cases, World deaths, US cases, US deaths, Illinois cases, Illinois deaths, Lake County cases, Lake County deaths]
     covid_stats = []
 
     # gets stats for world
@@ -56,9 +56,16 @@ def getStats():
             covid_stats.append(str(row[3].replace(" ","").replace("\n","")))
     
     # lake county stats
-    lc_text = soup3.table.tr.get_text()
-    lc_nums = re.findall(r'\d+', lc_text)
-    covid_stats.append(lc_nums[-1].replace("u",""))
+    lc_table = soup3.table
+    lc_rows = lc_table.find_all('tr')
+
+    for tr in lc_rows:
+        p = tr.find_all('p')
+        if "Cases" in str(p[0]): # we know this is the row with the headsers. We want the next row.
+            continue
+        row = [i.text for i in p]
+        covid_stats.append(row[0])
+        covid_stats.append(row[1])
 
     for elem in covid_stats:
         print(elem)
@@ -81,7 +88,7 @@ def main():
     covid_world = ("\n\nWorld cases: " + stats[0] + "\nWorld deaths: " + stats[1])
     covid_us = ("\nUS cases: " + stats[2] + "\nUS deaths: " + stats[3])
     covid_illinois = ("\nIllinois cases: " + stats[4] + "\nIllinois deaths: " + stats[5])
-    covid_lc = ("\nLake County cases: " + stats[6])
+    covid_lc = ("\nLake County cases: " + stats[6] + "\nLake County deaths: " + stats[7])
     tweet = ("COVID-19 STATS\n" + now.strftime("%m-%d-%y %I:%M %p") + covid_world + covid_us + covid_illinois + covid_lc)
     
     api.update_status(tweet)
